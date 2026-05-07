@@ -1,0 +1,1207 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Elvedes Disc Brake Pad Finder</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Inter+Tight:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --elv-blue: #00A4DC;
+  --elv-blue-dark: #0086B3;
+  --elv-blue-deep: #003F5C;
+  --elv-orange: #E94E1B;
+  --elv-orange-dark: #C43F12;
+  --grey-100: #F5F7F9;
+  --grey-200: #E8ECEF;
+  --grey-300: #C8D0D6;
+  --grey-500: #6B7785;
+  --grey-700: #384049;
+  --grey-900: #1A1F25;
+  --compound-grey: #9CA3AB;
+  --compound-blue: #00A4DC;
+  --compound-black: #2A2F36;
+  --compound-gold: #D4A847;
+  --shadow-sm: 0 2px 8px rgba(0,63,92,0.08);
+  --shadow-md: 0 8px 24px rgba(0,63,92,0.12);
+  --shadow-lg: 0 16px 48px rgba(0,63,92,0.16);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  font-family: 'Inter Tight', -apple-system, sans-serif;
+  background: var(--grey-100);
+  color: var(--grey-900);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  background:
+    radial-gradient(ellipse 800px 600px at 0% 0%, rgba(0,164,220,0.08), transparent 50%),
+    radial-gradient(ellipse 600px 400px at 100% 100%, rgba(233,78,27,0.05), transparent 50%),
+    var(--grey-100);
+}
+
+.app {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 32px 24px 64px;
+}
+
+/* HEADER */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 40px;
+  padding-bottom: 24px;
+  border-bottom: 2px solid var(--grey-200);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.brand-logo {
+  height: 52px;
+  width: auto;
+  display: block;
+  filter: drop-shadow(0 2px 4px rgba(196, 63, 18, 0.15));
+}
+
+.brand-tag {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--grey-500);
+  font-weight: 600;
+}
+
+.brand-tag strong {
+  color: var(--elv-blue-deep);
+  font-weight: 700;
+}
+
+.header-meta {
+  text-align: right;
+  font-size: 11px;
+  color: var(--grey-500);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.header-meta span {
+  display: block;
+}
+
+.header-meta strong {
+  color: var(--elv-blue-deep);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+/* TITLE */
+.title-block {
+  margin-bottom: 40px;
+  position: relative;
+}
+
+.title-eyebrow {
+  display: inline-block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  color: var(--elv-blue);
+  background: rgba(0,164,220,0.08);
+  padding: 6px 12px;
+  border-radius: 4px;
+  margin-bottom: 16px;
+  text-transform: uppercase;
+}
+
+h1 {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 800;
+  font-size: clamp(40px, 6vw, 64px);
+  line-height: 0.95;
+  letter-spacing: -0.01em;
+  color: var(--elv-blue-deep);
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+h1 .accent {
+  color: var(--elv-blue);
+  position: relative;
+  display: inline-block;
+}
+
+h1 .accent::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--elv-orange);
+}
+
+.subtitle {
+  font-size: 16px;
+  color: var(--grey-500);
+  max-width: 560px;
+  line-height: 1.5;
+}
+
+/* PROGRESS */
+.progress {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 40px;
+}
+
+.progress-step {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  background: white;
+  border-radius: 12px;
+  border: 2px solid var(--grey-200);
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-sm);
+  position: relative;
+  overflow: hidden;
+}
+
+.progress-step.active {
+  border-color: var(--elv-blue);
+  background: linear-gradient(135deg, white 0%, rgba(0,164,220,0.03) 100%);
+}
+
+.progress-step.complete {
+  border-color: var(--elv-blue-dark);
+  background: var(--elv-blue-deep);
+  color: white;
+}
+
+.progress-step.complete .progress-num {
+  background: var(--elv-orange);
+  color: white;
+}
+
+.progress-num {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--grey-200);
+  color: var(--grey-700);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  font-weight: 700;
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+}
+
+.progress-step.active .progress-num {
+  background: var(--elv-blue);
+  color: white;
+}
+
+.progress-label {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 600;
+  color: var(--grey-500);
+}
+
+.progress-step.active .progress-label,
+.progress-step.complete .progress-label {
+  color: inherit;
+}
+
+.progress-value {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--grey-900);
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.progress-step.complete .progress-value {
+  color: white;
+}
+
+.progress-content {
+  min-width: 0;
+  flex: 1;
+}
+
+/* CARD / STAGES */
+.stage {
+  background: white;
+  border-radius: 16px;
+  padding: 32px;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--grey-200);
+  margin-bottom: 24px;
+  display: none;
+}
+
+.stage.active {
+  display: block;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.stage-header {
+  margin-bottom: 24px;
+}
+
+.stage-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--elv-blue-deep);
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  line-height: 1;
+  margin-bottom: 6px;
+}
+
+.stage-subtitle {
+  font-size: 14px;
+  color: var(--grey-500);
+}
+
+/* SEARCH INPUT */
+.search-wrap {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 14px 16px 14px 44px;
+  font-family: inherit;
+  font-size: 15px;
+  background: var(--grey-100);
+  border: 2px solid var(--grey-200);
+  border-radius: 10px;
+  outline: none;
+  transition: all 0.2s ease;
+  color: var(--grey-900);
+}
+
+.search-input:focus {
+  border-color: var(--elv-blue);
+  background: white;
+  box-shadow: 0 0 0 4px rgba(0,164,220,0.08);
+}
+
+.search-input::placeholder { color: var(--grey-300); }
+
+.search-icon {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--grey-300);
+  pointer-events: none;
+}
+
+/* OPTIONS GRID */
+.options-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 10px;
+  max-height: 480px;
+  overflow-y: auto;
+  padding: 4px;
+}
+
+.options-grid::-webkit-scrollbar { width: 8px; }
+.options-grid::-webkit-scrollbar-track { background: transparent; }
+.options-grid::-webkit-scrollbar-thumb {
+  background: var(--grey-300);
+  border-radius: 4px;
+}
+
+.option-btn {
+  background: white;
+  border: 2px solid var(--grey-200);
+  border-radius: 10px;
+  padding: 14px 16px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--grey-900);
+  cursor: pointer;
+  transition: all 0.18s ease;
+  text-align: left;
+  position: relative;
+  overflow: hidden;
+}
+
+.option-btn::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: var(--elv-blue);
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform 0.2s ease;
+}
+
+.option-btn:hover {
+  border-color: var(--elv-blue);
+  background: linear-gradient(135deg, white 0%, rgba(0,164,220,0.04) 100%);
+  transform: translateX(2px);
+}
+
+.option-btn:hover::before { transform: scaleY(1); }
+
+.option-btn-models {
+  font-size: 11px;
+  color: var(--grey-500);
+  font-weight: 500;
+  margin-top: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.option-btn.model {
+  font-size: 13px;
+  line-height: 1.4;
+  font-weight: 500;
+  padding: 16px 18px;
+}
+
+.option-btn.model strong {
+  display: block;
+  font-weight: 700;
+  margin-bottom: 4px;
+  color: var(--elv-blue-deep);
+  font-size: 14px;
+}
+
+/* BACK BUTTON */
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  padding: 8px 0;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--elv-blue);
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 16px;
+  transition: gap 0.2s ease;
+}
+
+.back-btn:hover { gap: 10px; }
+
+/* RESULTS */
+.results-stage {
+  background: linear-gradient(135deg, var(--elv-blue-deep) 0%, #002B40 100%);
+  color: white;
+  border: none;
+}
+
+.results-stage .stage-title { color: white; }
+.results-stage .stage-subtitle { color: rgba(255,255,255,0.7); }
+
+.result-summary {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin-bottom: 24px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: center;
+}
+
+.result-summary-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.result-summary-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.5);
+  margin-bottom: 2px;
+}
+
+.result-summary-value {
+  font-weight: 600;
+  font-size: 15px;
+  color: white;
+}
+
+.result-divider {
+  width: 1px;
+  height: 32px;
+  background: rgba(255,255,255,0.15);
+}
+
+/* COMPOUNDS */
+.compounds-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.compound-card {
+  background: white;
+  border-radius: 12px;
+  padding: 24px 20px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.compound-card.unavailable {
+  background: rgba(255,255,255,0.05);
+  border: 1px dashed rgba(255,255,255,0.15);
+  box-shadow: none;
+}
+
+.compound-card.available:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+}
+
+.compound-color-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+}
+
+.compound-card.grey .compound-color-bar { background: var(--compound-grey); }
+.compound-card.blue .compound-color-bar { background: var(--compound-blue); }
+.compound-card.black .compound-color-bar { background: var(--compound-black); }
+.compound-card.gold .compound-color-bar { background: var(--compound-gold); }
+
+.compound-name {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  margin-bottom: 4px;
+  color: var(--grey-900);
+}
+
+.compound-card.unavailable .compound-name {
+  color: rgba(255,255,255,0.5);
+}
+
+.compound-hardness {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--grey-500);
+  margin-bottom: 16px;
+  font-weight: 600;
+}
+
+.compound-card.unavailable .compound-hardness {
+  color: rgba(255,255,255,0.4);
+}
+
+.compound-code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--elv-blue-deep);
+  letter-spacing: -0.01em;
+  line-height: 1;
+}
+
+.compound-card.unavailable .compound-code {
+  font-size: 13px;
+  color: rgba(255,255,255,0.4);
+  font-weight: 500;
+}
+
+.compound-card.grey .compound-code { color: var(--grey-700); }
+.compound-card.blue .compound-code { color: var(--elv-blue-dark); }
+.compound-card.black .compound-code { color: var(--compound-black); }
+.compound-card.gold .compound-code {
+  color: #B58F2D;
+}
+
+.compound-stars {
+  margin-top: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.compound-card.unavailable .compound-stars { display: none; }
+
+.compound-stat {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--grey-500);
+}
+
+.compound-stat-name {
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 500;
+}
+
+.stars {
+  display: flex;
+  gap: 1px;
+}
+
+.star {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--grey-200);
+}
+
+.star.filled { background: var(--elv-blue); }
+.compound-card.grey .star.filled { background: var(--compound-grey); }
+.compound-card.black .star.filled { background: var(--compound-black); }
+.compound-card.gold .star.filled { background: var(--compound-gold); }
+
+/* RESULTS ACTIONS */
+.result-actions {
+  margin-top: 28px;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.btn {
+  padding: 14px 24px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-primary {
+  background: var(--elv-orange);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--elv-orange-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(233,78,27,0.3);
+}
+
+.btn-secondary {
+  background: rgba(255,255,255,0.1);
+  color: white;
+  border: 1px solid rgba(255,255,255,0.2);
+}
+
+.btn-secondary:hover {
+  background: rgba(255,255,255,0.15);
+}
+
+/* INFO BOX */
+.info-box {
+  margin-top: 20px;
+  padding: 16px;
+  background: rgba(255,255,255,0.05);
+  border-left: 3px solid var(--elv-orange);
+  border-radius: 0 8px 8px 0;
+  font-size: 13px;
+  color: rgba(255,255,255,0.8);
+  line-height: 1.5;
+}
+
+/* NO RESULTS */
+.no-results {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--grey-500);
+}
+
+.no-results-icon {
+  font-size: 32px;
+  margin-bottom: 8px;
+  opacity: 0.4;
+}
+
+/* FOOTER */
+.footer {
+  text-align: center;
+  margin-top: 32px;
+  padding-top: 20px;
+  font-size: 11px;
+  color: var(--grey-300);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+@media (max-width: 700px) {
+  .progress { flex-direction: column; gap: 8px; }
+  .stage { padding: 24px 20px; }
+  .compounds-grid { grid-template-columns: 1fr 1fr; }
+  .header-meta { display: none; }
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="brand">
+      <img class="brand-logo" src="data:image/png;base64,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" alt="Elvedes">
+      <div>
+        <div class="brand-tag">Bike components <strong>since 1965</strong></div>
+      </div>
+    </div>
+    <div class="header-meta">
+      <span>Catalogus</span>
+      <strong>2026</strong>
+    </div>
+  </header>
+
+  <!-- TITLE -->
+  <div class="title-block">
+    <div class="title-eyebrow">Disc Brake Pad Finder</div>
+    <h1>Vind de juiste<br><span class="accent">remblokken</span></h1>
+    <p class="subtitle">
+      Selecteer je merk en model — wij tonen direct de bijbehorende Elvedes-remblokken in alle beschikbare compounds.
+    </p>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="progress">
+    <div class="progress-step active" id="step-1">
+      <div class="progress-num">1</div>
+      <div class="progress-content">
+        <div class="progress-label">Merk</div>
+        <div class="progress-value" id="prog-brand">Kies een merk</div>
+      </div>
+    </div>
+    <div class="progress-step" id="step-2">
+      <div class="progress-num">2</div>
+      <div class="progress-content">
+        <div class="progress-label">Model</div>
+        <div class="progress-value" id="prog-model">—</div>
+      </div>
+    </div>
+    <div class="progress-step" id="step-3">
+      <div class="progress-num">3</div>
+      <div class="progress-content">
+        <div class="progress-label">Resultaat</div>
+        <div class="progress-value" id="prog-result">—</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STAGE 1: BRAND -->
+  <div class="stage active" id="stage-brand">
+    <div class="stage-header">
+      <div class="stage-title">Stap 1 — Selecteer merk</div>
+      <div class="stage-subtitle">Welk merk remmen heeft de fiets?</div>
+    </div>
+    <div class="search-wrap">
+      <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+      <input type="text" class="search-input" id="brand-search" placeholder="Zoek een merk... (bijv. Shimano, Magura, SRAM)" autocomplete="off">
+    </div>
+    <div class="options-grid" id="brand-grid"></div>
+  </div>
+
+  <!-- STAGE 2: MODEL -->
+  <div class="stage" id="stage-model">
+    <button class="back-btn" onclick="goBack(1)">← Terug naar merken</button>
+    <div class="stage-header">
+      <div class="stage-title">Stap 2 — Selecteer model</div>
+      <div class="stage-subtitle" id="model-subtitle">Welk type rem?</div>
+    </div>
+    <div class="search-wrap">
+      <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+      <input type="text" class="search-input" id="model-search" placeholder="Zoek model... (bijv. BR-M615, Elixir, MT5)" autocomplete="off">
+    </div>
+    <div class="options-grid" id="model-grid"></div>
+  </div>
+
+  <!-- STAGE 3: RESULTS -->
+  <div class="stage results-stage" id="stage-result">
+    <button class="back-btn" onclick="goBack(2)" style="color: rgba(255,255,255,0.8);">← Terug naar modellen</button>
+    <div class="stage-header">
+      <div class="stage-title">Stap 3 — Beschikbare remblokken</div>
+      <div class="stage-subtitle">Kies de compound die past bij jouw gebruik</div>
+    </div>
+
+    <div class="result-summary" id="result-summary"></div>
+
+    <div class="compounds-grid" id="compounds-grid"></div>
+
+    <div class="info-box">
+      <strong>Compound-hardheid bepaalt het rijgedrag:</strong> Super soft (grijs) is geluidsdempend, soft (blauw) is comfortabel en betrouwbaar voor dagelijks gebruik, medium (zwart) is krachtig voor cargo/e-bike/MTB, hard (goud) is slijt- en hittevast voor intensief gebruik. Zie pag. 8 van de catalogus voor uitgebreide info.
+    </div>
+
+    <div class="result-actions">
+      <button class="btn btn-primary" onclick="reset()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+        Nieuwe zoekopdracht
+      </button>
+    </div>
+  </div>
+
+  <div class="footer">
+    Data: Elvedes Productcatalogus 2026 — pag. 9-12
+  </div>
+
+</div>
+
+<script>
+// ============ DATA ============
+const data = [
+  { brand: "Alhonga", model: "SNG mechanical", grey: null, blue: "6872", black: "6872MC", gold: null },
+  { brand: "Assess", model: "C420, C425, C470", grey: null, blue: "6886", black: "6886MC", gold: null },
+  { brand: "Assess", model: "C430", grey: null, blue: "6881", black: null, gold: null },
+  { brand: "Avid", model: "BB3, BB5", grey: null, blue: "6886", black: "6886MC", gold: null },
+  { brand: "Avid", model: "BB7, Juicy", grey: null, blue: "6855", black: "6855MC", gold: "6855S" },
+  { brand: "Avid", model: "Code, Code 5", grey: null, blue: "6882", black: null, gold: null },
+  { brand: "Avid", model: "Code > 2011", grey: null, blue: "6895", black: "6895MC", gold: "6895S" },
+  { brand: "Avid", model: "DB 1/2/3, Elixir 1/3/5/7/9/CR/R, GT/X0/XX/XX World Cup", grey: "6890T", blue: "6890", black: "6890MC", gold: "6890S" },
+  { brand: "Avid", model: "X0, X7, X9 Trail", grey: null, blue: "6898", black: "6898MC", gold: "6898S" },
+  { brand: "Brekr", model: "F250", grey: "6890T", blue: "6890", black: "6890MC", gold: "6890S" },
+  { brand: "Campagnolo", model: "Alle modellen", grey: "6908T", blue: null, black: null, gold: null },
+  { brand: "Cannondale", model: "Coda", grey: null, blue: "6865", black: null, gold: null },
+  { brand: "Clarks", model: "Clout 1, S2", grey: "6854T", blue: "6854", black: "6854MC", gold: "6854S" },
+  { brand: "Clarks", model: "M1, M2, M3, CMD-22(FM), CMD-23, CMD-27", grey: "6894T", blue: "6894", black: "6894MC", gold: "6894S" },
+  { brand: "Clarks", model: "M4", grey: "6891T", blue: "6891", black: "6891MC", gold: "6891S" },
+  { brand: "Clarks", model: "Exo, Skeletal", grey: null, blue: "6860", black: null, gold: null },
+  { brand: "Clarks", model: "CMD-24, HDB-540, HDB-600, HDB-790", grey: "6859T", blue: "6859", black: "6859MC", gold: "6859S" },
+  { brand: "Clarks", model: "CMD-9, CMD-17(R)", grey: null, blue: "6886", black: "6886MC", gold: null },
+  { brand: "Clarks", model: "CMD-15", grey: null, blue: "6855", black: "6855MC", gold: "6855S" },
+  { brand: "Clarks", model: "CMD-5, CMD-6, CMD-7, CMD-12", grey: null, blue: "6913", black: null, gold: null },
+  { brand: "Cowboy", model: "Cruiser (ST), C2, C3, Classic, Cross (ST)", grey: "6907T", blue: "6907", black: "6907MC", gold: "6907S" },
+  { brand: "Diatech", model: "Anchor", grey: null, blue: "6880", black: null, gold: null },
+  { brand: "Diatech", model: "Twincam", grey: null, blue: "6864", black: null, gold: null },
+  { brand: "Elvedes", model: "HP4000", grey: "6890T", blue: "6890", black: "6890MC", gold: "6890S" },
+  { brand: "Elvedes", model: "MP1000 PM", grey: "6894T", blue: "6894", black: "6894MC", gold: "6894S" },
+  { brand: "Elvedes", model: "MP1000 FM", grey: "6907T", blue: "6907", black: "6907MC", gold: "6907S" },
+  { brand: "Formula", model: "4-Racing, B4 Team", grey: null, blue: "6869", black: null, gold: null },
+  { brand: "Formula", model: "C1, Cura, Cura-E, Mega, R1(R), RO(R), RX, The one", grey: null, blue: "6893", black: "6893MC", gold: "6893S" },
+  { brand: "Formula", model: "Cura 4", grey: null, blue: "6909", black: "6909MC", gold: "6909S" },
+  { brand: "Formula", model: "Extreme", grey: null, blue: "6869", black: null, gold: null },
+  { brand: "Formula", model: "Evoluzione", grey: null, blue: "6867", black: null, gold: null },
+  { brand: "Formula", model: "Oro", grey: null, blue: "6863", black: null, gold: "6863S" },
+  { brand: "FSA", model: "K-Force DB-TX-9000", grey: "6894T", blue: "6894", black: "6894MC", gold: "6894S" },
+  { brand: "FSA", model: "Afterburner DB-TX-9150", grey: "6894T", blue: "6894", black: "6894MC", gold: "6894S" },
+  { brand: "Giant", model: "MPH 2000", grey: null, blue: "6852", black: null, gold: null },
+  { brand: "Giant", model: "MPH 2001 - 2003, MPH-2, MPH-3", grey: null, blue: "6861", black: null, gold: null },
+  { brand: "Giant", model: "Root", grey: "6854T", blue: "6854", black: "6854MC", gold: "6854S" },
+  { brand: "Grimeca", model: "System 8, 12, 16", grey: null, blue: "6853", black: null, gold: null },
+  { brand: "Grimeca", model: "System 13", grey: null, blue: "6869", black: null, gold: null },
+  { brand: "Hayes", model: "Dominion A4", grey: null, blue: "6910", black: "6910MC", gold: "6910S" },
+  { brand: "Hayes", model: "Dyno, Stroker Ryde", grey: null, blue: "6888", black: null, gold: "6888S" },
+  { brand: "Hayes", model: "El Camino", grey: null, blue: "6885", black: null, gold: null },
+  { brand: "Hayes", model: "HFX, MX 1", grey: null, blue: "6850", black: null, gold: "6850S" },
+  { brand: "Hayes", model: "Prime", grey: null, blue: "6896", black: null, gold: "6896S" },
+  { brand: "Hayes", model: "Stroker Ace", grey: null, blue: "6892", black: null, gold: null },
+  { brand: "Hayes", model: "Stroker Carbon, Gram, Trail, GX2", grey: null, blue: "6889", black: null, gold: null },
+  { brand: "Hayes", model: "MX2, MX3, MX4, Sole", grey: "6862T", blue: "6862", black: "6862MC", gold: null },
+  { brand: "Hope", model: "C2 Pro, C2 Sport, O2 Pro, O2 Sport", grey: null, blue: "6852", black: null, gold: null },
+  { brand: "Hope", model: "DH4, M4 2002", grey: null, blue: "6871", black: null, gold: null },
+  { brand: "Hope", model: "E4, RX4-SH", grey: null, blue: "6903", black: null, gold: null },
+  { brand: "Hope", model: "Mini", grey: null, blue: "6870", black: null, gold: null },
+  { brand: "Hope", model: "Mono 6 2007, 6-Ti 2004, Moto M6", grey: null, blue: "6876", black: null, gold: null },
+  { brand: "Hope", model: "Mono M4", grey: null, blue: "6853", black: null, gold: null },
+  { brand: "Hope", model: "Mono Mini", grey: null, blue: "6877", black: null, gold: null },
+  { brand: "Hope", model: "Mono Trial, Trial Zone", grey: null, blue: "6887", black: null, gold: null },
+  { brand: "Hope", model: "(Moto) V2", grey: null, blue: "6883", black: null, gold: null },
+  { brand: "Hope", model: "V4", grey: null, blue: "6899", black: null, gold: "6899S" },
+  { brand: "Hope", model: "X2", grey: null, blue: "6911", black: "6911MC", gold: "6911S" },
+  { brand: "Hope", model: "XC4", grey: null, blue: "6873", black: null, gold: null },
+  { brand: "Logan", model: "Alle modellen", grey: null, blue: "6874", black: null, gold: null },
+  { brand: "Magura", model: "Clara 2000 - 2001, Louise 1998 - 2001", grey: null, blue: "6851", black: null, gold: null },
+  { brand: "Magura", model: "Clara 2001 - 2002, Louise (FR) 2002 - 2006", grey: null, blue: "6857", black: null, gold: null },
+  { brand: "Magura", model: "Gustav M 2000 - 2011", grey: null, blue: "6878", black: null, gold: null },
+  { brand: "Magura", model: "Julie 2001 - 2008", grey: null, blue: "6856", black: null, gold: null },
+  { brand: "Magura", model: "Julie HP, Louise > 2007, Louise Bat, Louise Carbon, Marta > 2009", grey: null, blue: "6884", black: null, gold: "6884S" },
+  { brand: "Magura", model: "Marta 2002 - 2008, Marta SL 2003 - 2008", grey: null, blue: "6860", black: null, gold: null },
+  { brand: "Magura", model: "MT2, MT4, MT6, MT8, MTC4, MT Sport, MT Trail (rear)", grey: "6897T", blue: "6897", black: "6897MC", gold: "6897S" },
+  { brand: "Magura", model: "MT A2", grey: null, blue: "6916", black: null, gold: null },
+  { brand: "Magura", model: "MT5", grey: "6902T", blue: "6902", black: "6902MC", gold: "6902S" },
+  { brand: "Magura", model: "MT7, MTC5, MT Thirty, MT Trail (front)", grey: "6902T", blue: "6902 / 6904", black: "6902MC / 6904MC", gold: "6902S / 6904S" },
+  { brand: "Promax", model: "DC320, 610, 610J", grey: null, blue: "6879", black: null, gold: null },
+  { brand: "Promax", model: "DC600", grey: null, blue: "6850", black: null, gold: "6850S" },
+  { brand: "Promax", model: "DC710, 720, 913, Decipher, DSK-300 (R), 310, 330R, 715, Render (R)", grey: null, blue: "6886", black: "6886MC", gold: null },
+  { brand: "Promax", model: "DC901, 951", grey: null, blue: "6880", black: null, gold: null },
+  { brand: "Promax", model: "DC905, 907, 908, DSK-950", grey: null, blue: "6855", black: "6855MC", gold: "6855S" },
+  { brand: "Promax", model: "DC910", grey: null, blue: "6851", black: null, gold: null },
+  { brand: "Promax", model: "Decode R DSK-718R, DSK-909, E-Capsule, F1, Lucid, Solve", grey: "6854T", blue: "6854", black: "6854MC", gold: "6854S" },
+  { brand: "Promax", model: "DSK-810", grey: "6862T", blue: "6862", black: "6862MC", gold: null },
+  { brand: "Promax", model: "Lucid P4", grey: null, blue: "6853", black: null, gold: null },
+  { brand: "Quad", model: "QHD-1", grey: "6854T", blue: "6854", black: "6854MC", gold: "6854S" },
+  { brand: "Rever", model: "MCX1 PM", grey: "6894T", blue: "6894", black: "6894MC", gold: "6894S" },
+  { brand: "RST", model: "D-Power", grey: "6854T", blue: "6854", black: "6854MC", gold: "6854S" },
+  { brand: "RST", model: "DA", grey: null, blue: "6866", black: null, gold: null },
+  { brand: "Shimano", model: "105 BR-R7070, 7170, BR-RS505", grey: "6907T", blue: "6907", black: "6907MC", gold: "6907S" },
+  { brand: "Shimano", model: "Acera BR-M3050", grey: "6854T", blue: "6854", black: "6854MC", gold: "6854S" },
+  { brand: "Shimano", model: "Alfine BR-S500, 501", grey: "6859T", blue: "6859", black: "6859MC", gold: "6859S" },
+  { brand: "Shimano", model: "Alfine BR-S700, 7000", grey: "6894T", blue: "6894", black: "6894MC", gold: "6894T" },
+  { brand: "Shimano", model: "Alivio BR-M395, 446, 4050", grey: "6854T", blue: "6854", black: "6854MC", gold: "6854S" },
+  { brand: "Shimano", model: "Altus BR-M315, 365, 375", grey: "6854T", blue: "6854", black: "6854MC", gold: "6854S" },
+  { brand: "Shimano", model: "BR-CX75, 77, BR-R515, 517", grey: "6894T", blue: "6894", black: "6894MC", gold: "6894S" },
+  { brand: "Shimano", model: "BR-M355, 415, 416, 416A, 445, 447, 465, 475, 485, 486, 495, 575, BR-MT200, 400, 410, 500, BR-UR300", grey: "6854T", blue: "6854", black: "6854MC", gold: "6854S" },
+  { brand: "Shimano", model: "BR-M545, BR-R505, BR-T605", grey: "6859T", blue: "6859", black: "6859MC", gold: "6859S" },
+  { brand: "Shimano", model: "BR-MT420, 520", grey: "6891T", blue: "6891", black: "6891MC", gold: "6891S" },
+  { brand: "Shimano", model: "BR-RS305, BR-RS405, BR-RS805", grey: "6907T", blue: "6907", black: "6907MC", gold: "6907S" },
+  { brand: "Shimano", model: "Deore BR-M515, 515LA, 525, BR-T615", grey: "6854T", blue: "6854", black: "6854MC", gold: "6854S" },
+  { brand: "Shimano", model: "Deore BR-M535, 595, 596", grey: "6859T", blue: "6859", black: "6859MC", gold: "6859S" },
+  { brand: "Shimano", model: "Deore BR-M555", grey: null, blue: "6858", black: null, gold: null },
+  { brand: "Shimano", model: "Deore BR-M615, 6000, 6100, BR-R785, BR-RS785", grey: "6894T", blue: "6894", black: "6894MC", gold: "6894S" },
+  { brand: "Shimano", model: "Deore BR-M6120", grey: "6891T", blue: "6891", black: "6891MC", gold: "6891S" },
+  { brand: "Shimano", model: "Deore LX BR-M585, BR-T665", grey: "6859T", blue: "6859", black: "6859MC", gold: "6859S" },
+  { brand: "Shimano", model: "Deore LX BR-T675", grey: "6854T", blue: "6854", black: "6854MC", gold: "6854S" },
+  { brand: "Shimano", model: "Deore XT BR-M755, 755-DH, 756", grey: null, blue: "6853", black: null, gold: null },
+  { brand: "Shimano", model: "Deore XT BR-M765, 775, 776", grey: "6859T", blue: "6859", black: "6859MC", gold: "6859S" },
+  { brand: "Shimano", model: "Deore XT BR-M785, 8000, 8100", grey: "6894T", blue: "6894", black: "6894MC", gold: "6894S" },
+  { brand: "Shimano", model: "Deore XT BR-M8020, 8120", grey: "6891T", blue: "6891", black: "6891MC", gold: "6891S" },
+  { brand: "Shimano", model: "Deore XT BR-M8110", grey: "6907T", blue: "6907", black: "6907MC", gold: "6907S" },
+  { brand: "Shimano", model: "Dura-ace BR-R9170, 9270", grey: "6907T", blue: "6907", black: "6907MC", gold: "6907S" },
+  { brand: "Shimano", model: "GRX BR-RX400, 810", grey: "6907T", blue: "6907", black: "6907MC", gold: "6907S" },
+  { brand: "Shimano", model: "Hone BR-M601", grey: "6859T", blue: "6859", black: "6859MC", gold: "6859S" },
+  { brand: "Shimano", model: "Metrea BR-U5000", grey: "6907T", blue: "6907", black: "6907MC", gold: "6907S" },
+  { brand: "Shimano", model: "Nexave BR-C501, 601", grey: "6854T", blue: "6854", black: "6854MC", gold: "6854S" },
+  { brand: "Shimano", model: "Nexave BR-C901", grey: null, blue: "6858", black: null, gold: null },
+  { brand: "Shimano", model: "Saint BR-M757", grey: "6854T", blue: "6854", black: "6854MC", gold: "6854S" },
+  { brand: "Shimano", model: "Saint BR-M800", grey: "6859T", blue: "6859", black: "6859MC", gold: "6859S" },
+  { brand: "Shimano", model: "Saint BR-M810, 820", grey: "6891T", blue: "6891", black: "6891MC", gold: "6891S" },
+  { brand: "Shimano", model: "SLX BR-M665", grey: "6859T", blue: "6859", black: "6859MC", gold: "6859S" },
+  { brand: "Shimano", model: "SLX BR-M666, 675, 7000, 7100", grey: "6894T", blue: "6894", black: "6894MC", gold: "6894S" },
+  { brand: "Shimano", model: "SLX BR-M7110", grey: "6907T", blue: "6907", black: "6907MC", gold: "6907S" },
+  { brand: "Shimano", model: "SLX BR-M7120", grey: "6891T", blue: "6891", black: "6891MC", gold: "6891S" },
+  { brand: "Shimano", model: "Sora BR-R315, BR-R317", grey: "6894T", blue: "6894", black: "6894MC", gold: "6894S" },
+  { brand: "Shimano", model: "Tiagra BR-4770", grey: "6907T", blue: "6907", black: "6907MC", gold: "6907S" },
+  { brand: "Shimano", model: "Tourney BR-TX805", grey: "6854T", blue: "6854", black: "6854MC", gold: "6854S" },
+  { brand: "Shimano", model: "Ultegra BR-R785, BR-RS785", grey: "6894T", blue: "6894", black: "6894MC", gold: "6894S" },
+  { brand: "Shimano", model: "Ultegra BR-R8070, BR-R8170", grey: "6907T", blue: "6907", black: "6907MC", gold: "6907S" },
+  { brand: "Shimano", model: "XTR BR-M9000, BR-M9020, BR-M985, BR-M987", grey: "6894T", blue: "6894", black: "6894MC", gold: "6894S" },
+  { brand: "Shimano", model: "XTR BR-M9100, BR-M9110", grey: "6907T", blue: "6907", black: "6907MC", gold: "6907S" },
+  { brand: "Shimano", model: "XTR BR-M9120", grey: "6891T", blue: "6891", black: "6891MC", gold: "6891S" },
+  { brand: "Shimano", model: "XTR BR-M965, BR-M966, BR-M975", grey: "6859T", blue: "6859", black: "6859MC", gold: "6859S" },
+  { brand: "Shimano", model: "ZEE BR-M640", grey: "6891T", blue: "6891", black: "6891MC", gold: "6891S" },
+  { brand: "SRAM", model: "Apex/Force/RED/Rival AXS, DB5, Level 2P, S-300, S-900, Via GT, X0, XX", grey: "6890T", blue: "6890", black: "6890MC", gold: "6890S" },
+  { brand: "SRAM", model: "Code, DB8, G2 RE, Guide RE", grey: null, blue: "6895", black: "6895MC", gold: "6895S" },
+  { brand: "SRAM", model: "G2 R/RS/RSC/ULT, Guide R/RS/RSC/T/ULT, Level 4P, Trail", grey: null, blue: "6898", black: "6898MC", gold: "6898S" },
+  { brand: "SRAM", model: "Apex/Force/Rival 1, Force/Red/Rival 22, Red eTap HRD, S-700", grey: null, blue: "6900", black: "6900MC", gold: "6900S" },
+  { brand: "SRAM", model: "Maven", grey: null, blue: "6917", black: null, gold: null },
+  { brand: "Star Union", model: "150PYDZS/2, 220PYD, 221PYDZJ", grey: null, blue: null, black: "6914MC", gold: null },
+  { brand: "Star Union", model: "150PYDZS/2 Pro, 220PYD Pro, 221PYDZJ Pro", grey: null, blue: null, black: "6915MC", gold: null },
+  { brand: "Star Union", model: "240PYD", grey: "6854T", blue: "6854", black: "6854MC", gold: "6854S" },
+  { brand: "Suntour", model: "DB XCC-MC", grey: null, blue: "6875", black: null, gold: null },
+  { brand: "Suntour", model: "SR1", grey: null, blue: "6879", black: null, gold: null },
+  { brand: "Tektro", model: "Aquila MD-M500", grey: "6854T", blue: "6854", black: "6854MC", gold: "6854S" },
+  { brand: "Tektro", model: "Aries MD-M300", grey: "6854T", blue: "6854", black: "6854MC", gold: "6854S" },
+  { brand: "Tektro", model: "Auriga HD-E510, E515, T515", grey: null, blue: "6875", black: null, gold: null },
+  { brand: "Tektro", model: "Auriga HD-E540, E541, E545, E546, T390, T540, T541, T545", grey: null, blue: null, black: "6914MC", gold: null },
+  { brand: "Tektro", model: "Auriga HD-E500, E520, E525, E530, M290, M291, M700, T520, T525, T530", grey: "6854T", blue: "6854", black: "6854MC", gold: "6854S" },
+  { brand: "Tektro", model: "Auriga HD-5040, 5041, E740, E741, E745, E746, E747, T740, T741, T745, T746", grey: null, blue: null, black: "6915MC", gold: null },
+  { brand: "Tektro", model: "Dorado HD-E720, E725, E730", grey: "6891T", blue: "6891", black: "6891MC", gold: "6891S" },
+  { brand: "Tektro", model: "Dorado HD-E710", grey: null, blue: "6905", black: null, gold: null },
+  { brand: "Tektro", model: "Dorado HD-E715", grey: "6854T", blue: "6854", black: "6854MC", gold: "6854S" },
+  { brand: "Tektro", model: "Dorado HD-E731, T731, T737, T747", grey: null, blue: null, black: "6915MC", gold: null },
+  { brand: "Tektro", model: "Draco HD-M350, M351, M352", grey: "6854T", blue: "6854", black: "6854MC", gold: "6854S" },
+  { brand: "Tektro", model: "Draco HD-M390", grey: null, blue: null, black: "6914MC", gold: null },
+  { brand: "Tektro", model: "Gemini HD-M500, M501, M510, M520, M521", grey: "6854T", blue: "6854", black: "6854MC", gold: "6854S" },
+  { brand: "Tektro", model: "Gemini HD-M530 (front), M535", grey: null, blue: null, black: "6915MC", gold: null },
+  { brand: "Tektro", model: "Gemini HD-M530 (rear), M3520", grey: null, blue: null, black: "6914MC", gold: null },
+  { brand: "Tektro", model: "HDC HD-M300, M301, M330", grey: "6854T", blue: "6854", black: "6854MC", gold: "6854S" },
+  { brand: "Tektro", model: "HD-E350, E351, E3520, M275, M276, M280, M281, M285, M286, T275, T276, T280, T281, T285, T286, T385, T386, T3020, T3021, R280, R281, R285, R286", grey: "6854T", blue: "6854", black: "6854MC", gold: "6854S" },
+  { brand: "Tektro", model: "HD-E3940, T532 (front), T5040, T5041", grey: null, blue: null, black: "6915MC", gold: null },
+  { brand: "Tektro", model: "HD-R310, R510, R3020, R3021", grey: "6907T", blue: "6907", black: "6907MC", gold: "6907S" },
+  { brand: "Tektro", model: "HD-E395, T532 (rear)", grey: null, blue: null, black: "6914MC", gold: null },
+  { brand: "Tektro", model: "IO (N11.11)", grey: null, blue: "6868", black: null, gold: null },
+  { brand: "Tektro", model: "Junior HD-J285, J290, J2820, J2920, M282", grey: "6854T", blue: "6854", black: "6854MC", gold: "6854S" },
+  { brand: "Tektro", model: "Lyra MD-C500", grey: null, blue: "6901", black: null, gold: null },
+  { brand: "Tektro", model: "MD-C310, C510, C550, M280, U310, U510", grey: "6854T", blue: "6854", black: "6854MC", gold: "6854S" },
+  { brand: "Tektro", model: "Mira MD-C400", grey: "6854T", blue: "6854", black: "6854MC", gold: "6854S" },
+  { brand: "Tektro", model: "Novela MD-M311 (IOX.11)", grey: null, blue: "6912", black: null, gold: null },
+  { brand: "Tektro", model: "Novela MD-M311 (L10.11)", grey: null, blue: "6901", black: null, gold: null },
+  { brand: "Tektro", model: "Orion HD-M735 (front), M745, M750", grey: "6891T", blue: "6891", black: "6891MC", gold: "6891S" },
+  { brand: "Tektro", model: "Orion HD-M720, M730, M735 (rear), M740", grey: "6854T", blue: "6854", black: "6854MC", gold: "6854S" },
+  { brand: "Tektro", model: "Vela HD-T290", grey: "6854T", blue: "6854", black: "6854MC", gold: "6854S" },
+  { brand: "Tektro", model: "Volans HD-T533 (front), T535", grey: null, blue: null, black: "6915MC", gold: null },
+  { brand: "Tektro", model: "Volans HD-T700", grey: null, blue: "6875", black: null, gold: null },
+  { brand: "Tektro", model: "Volans HD-T710", grey: "6854T", blue: "6854", black: "6854MC", gold: "6854S" },
+  { brand: "Tektro", model: "Volans HD-T533 (rear), T3520", grey: null, blue: null, black: "6914MC", gold: null },
+  { brand: "TRP", model: "Dash Sport, HY/RD, Hylex, Hylex RS HD-C801, Parabox R, Slate X2, Spyke, Spyre", grey: "6854T", blue: "6854", black: "6854MC", gold: "6854S" },
+  { brand: "TRP", model: "G-Spec, Quadiem, Slate T4, Zurich", grey: "6891T", blue: "6891", black: "6891MC", gold: "6891S" },
+  { brand: "TRP", model: "Hylex HD-C810, Hylex RS HD-C811, HD-T910", grey: "6907T", blue: "6907", black: "6907MC", gold: "6907S" },
+  { brand: "VanMoof", model: "S4, X4, S3, X3, S2, X2", grey: "6862T", blue: "6862", black: "6862MC", gold: null },
+  { brand: "VanMoof", model: "A5, S5, S6, S6 Open", grey: "6906T", blue: "6906", black: "6906MC", gold: "6906S" },
+  { brand: "Zoom", model: "Alle modellen", grey: null, blue: "6872", black: "6872MC", gold: null }
+];
+
+// Compound metadata - hardness & star ratings (from page 8 of catalogus)
+const compoundMeta = {
+  grey:  { name: "Grey",  fullname: "Super soft", subname: "resin / organic", stars: { comfort: 4, noise: 5, power: 3, wear: 2, heat: 3 } },
+  blue:  { name: "Blue",  fullname: "Soft",       subname: "resin / organic", stars: { comfort: 5, noise: 4, power: 4, wear: 3, heat: 3 } },
+  black: { name: "Black", fullname: "Medium",     subname: "resin / organic", stars: { comfort: 4, noise: 3, power: 5, wear: 4, heat: 4 } },
+  gold:  { name: "Gold",  fullname: "Hard",       subname: "metal / sintered", stars: { comfort: 3, noise: 2, power: 4, wear: 5, heat: 5 } }
+};
+
+// ============ STATE ============
+let state = {
+  selectedBrand: null,
+  selectedEntry: null
+};
+
+// ============ HELPERS ============
+const $ = id => document.getElementById(id);
+
+function escapeHtml(str) {
+  return String(str).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
+}
+
+function getBrands() {
+  const brandMap = {};
+  data.forEach(d => {
+    if (!brandMap[d.brand]) brandMap[d.brand] = 0;
+    brandMap[d.brand]++;
+  });
+  return Object.entries(brandMap)
+    .map(([brand, count]) => ({ brand, count }))
+    .sort((a, b) => a.brand.localeCompare(b.brand));
+}
+
+function getModelsForBrand(brand) {
+  return data.filter(d => d.brand === brand);
+}
+
+// ============ STAGE NAVIGATION ============
+function setStage(stage) {
+  document.querySelectorAll('.stage').forEach(s => s.classList.remove('active'));
+  $(`stage-${stage}`).classList.add('active');
+
+  // Update progress steps
+  const steps = ['brand', 'model', 'result'];
+  const idx = steps.indexOf(stage);
+  steps.forEach((s, i) => {
+    const el = $(`step-${i + 1}`);
+    el.classList.remove('active', 'complete');
+    if (i < idx) el.classList.add('complete');
+    else if (i === idx) el.classList.add('active');
+  });
+
+  // Scroll to top of stage
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function goBack(toStep) {
+  if (toStep === 1) {
+    state.selectedBrand = null;
+    state.selectedEntry = null;
+    $('prog-brand').textContent = 'Kies een merk';
+    $('prog-model').textContent = '—';
+    $('prog-result').textContent = '—';
+    $('brand-search').value = '';
+    renderBrands();
+    setStage('brand');
+  } else if (toStep === 2) {
+    state.selectedEntry = null;
+    $('prog-model').textContent = '—';
+    $('prog-result').textContent = '—';
+    $('model-search').value = '';
+    renderModels();
+    setStage('model');
+  }
+}
+
+function reset() {
+  goBack(1);
+}
+
+// ============ STAGE 1: BRANDS ============
+function renderBrands(filter = '') {
+  const grid = $('brand-grid');
+  const brands = getBrands();
+  const f = filter.trim().toLowerCase();
+  const filtered = f ? brands.filter(b => b.brand.toLowerCase().includes(f)) : brands;
+
+  if (filtered.length === 0) {
+    grid.innerHTML = `<div class="no-results" style="grid-column: 1 / -1;"><div class="no-results-icon">⌕</div>Geen merk gevonden voor "${escapeHtml(filter)}"</div>`;
+    return;
+  }
+
+  grid.innerHTML = filtered.map(b => `
+    <button class="option-btn" onclick="selectBrand('${escapeHtml(b.brand).replace(/'/g, "\\'")}')">
+      ${escapeHtml(b.brand)}
+      <div class="option-btn-models">${b.count} ${b.count === 1 ? 'model' : 'modellen'}</div>
+    </button>
+  `).join('');
+}
+
+function selectBrand(brand) {
+  state.selectedBrand = brand;
+  $('prog-brand').textContent = brand;
+  $('model-subtitle').textContent = `Welk type rem? — ${brand}`;
+  $('model-search').value = '';
+  renderModels();
+  setStage('model');
+}
+
+// ============ STAGE 2: MODELS ============
+function renderModels(filter = '') {
+  const grid = $('model-grid');
+  const models = getModelsForBrand(state.selectedBrand);
+  const f = filter.trim().toLowerCase();
+  const filtered = f ? models.filter(m => m.model.toLowerCase().includes(f)) : models;
+
+  if (filtered.length === 0) {
+    grid.innerHTML = `<div class="no-results" style="grid-column: 1 / -1;"><div class="no-results-icon">⌕</div>Geen model gevonden voor "${escapeHtml(filter)}"</div>`;
+    return;
+  }
+
+  grid.innerHTML = filtered.map((m, idx) => {
+    const origIdx = data.indexOf(m);
+    return `
+      <button class="option-btn model" onclick="selectModel(${origIdx})">
+        <strong>${escapeHtml(m.model.split(',')[0])}</strong>
+        ${m.model.includes(',') ? escapeHtml(m.model.substring(m.model.indexOf(',') + 1).trim()) : ''}
+      </button>
+    `;
+  }).join('');
+}
+
+function selectModel(idx) {
+  state.selectedEntry = data[idx];
+  const shortModel = state.selectedEntry.model.length > 40
+    ? state.selectedEntry.model.substring(0, 40) + '…'
+    : state.selectedEntry.model;
+  $('prog-model').textContent = shortModel;
+  renderResults();
+  setStage('result');
+}
+
+// ============ STAGE 3: RESULTS ============
+function renderResults() {
+  const e = state.selectedEntry;
+  const compounds = ['grey', 'blue', 'black', 'gold'];
+
+  // Result summary
+  $('result-summary').innerHTML = `
+    <div class="result-summary-item">
+      <span class="result-summary-label">Merk</span>
+      <span class="result-summary-value">${escapeHtml(e.brand)}</span>
+    </div>
+    <div class="result-divider"></div>
+    <div class="result-summary-item">
+      <span class="result-summary-label">Model</span>
+      <span class="result-summary-value">${escapeHtml(e.model)}</span>
+    </div>
+  `;
+
+  // Update progress
+  const codes = compounds.filter(c => e[c]).map(c => e[c]).join(', ');
+  $('prog-result').textContent = codes || 'Geen resultaat';
+
+  // Compound cards
+  const cardsHtml = compounds.map(c => {
+    const code = e[c];
+    const meta = compoundMeta[c];
+    const available = !!code;
+
+    const starsHtml = ['comfort', 'noise', 'power', 'wear', 'heat'].map(stat => {
+      const labels = { comfort: 'Comfort', noise: 'Geluiddempend', power: 'Krachtig', wear: 'Slijtvast', heat: 'Hittevast' };
+      const filled = meta.stars[stat];
+      let dots = '';
+      for (let i = 1; i <= 5; i++) {
+        dots += `<div class="star ${i <= filled ? 'filled' : ''}"></div>`;
+      }
+      return `
+        <div class="compound-stat">
+          <span class="compound-stat-name">${labels[stat]}</span>
+          <div class="stars">${dots}</div>
+        </div>
+      `;
+    }).join('');
+
+    return `
+      <div class="compound-card ${c} ${available ? 'available' : 'unavailable'}">
+        <div class="compound-color-bar"></div>
+        <div class="compound-name">${meta.name}</div>
+        <div class="compound-hardness">${meta.fullname} · ${meta.subname}</div>
+        <div class="compound-code">${available ? escapeHtml(code) : 'Niet beschikbaar'}</div>
+        ${available ? `<div class="compound-stars">${starsHtml}</div>` : ''}
+      </div>
+    `;
+  }).join('');
+
+  $('compounds-grid').innerHTML = cardsHtml;
+}
+
+// ============ INIT ============
+$('brand-search').addEventListener('input', e => renderBrands(e.target.value));
+$('model-search').addEventListener('input', e => renderModels(e.target.value));
+
+// Keyboard support
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    const activeStage = document.querySelector('.stage.active').id;
+    if (activeStage === 'stage-result') goBack(2);
+    else if (activeStage === 'stage-model') goBack(1);
+  }
+});
+
+renderBrands();
+</script>
+</body>
+</html>
